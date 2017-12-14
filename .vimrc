@@ -286,7 +286,7 @@ set statusline+=%*\ %-3(%{FileSize()}%)                 " File size
 "Other functions and mappings
 
 "Show visual width limit
-highlight ColorColumn ctermbg=77
+highlight ColorColumn ctermbg=235
 
 function! ToggleWidthLine()
     if &colorcolumn ==# "80" 
@@ -298,7 +298,7 @@ function! ToggleWidthLine()
     endif
 endfunction
 
-noremap <silent> w :call ToggleWidthLine()<cr>
+noremap <silent> ,w :call ToggleWidthLine()<cr>
 
 "Toggle current line and/or column
 
