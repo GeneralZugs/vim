@@ -85,6 +85,18 @@ set foldnestmax=10 "deepest fold is 10 levels
 set nofoldenable "don't fold by default
 set foldlevel=1
 
+" Commenting blocks of code.
+autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType tex              let b:comment_leader = '% '
+autocmd FileType mail             let b:comment_leader = '> '
+autocmd FileType vim              let b:comment_leader = '" '
+noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
+noremap <silent> <F7> :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> <F8> :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
+
 "disable error bells
 set noerrorbells
 set visualbell
@@ -115,8 +127,6 @@ set linebreak " set soft wrapping
 set textwidth=0
 "" set nowrap  " don't automatically wrap on load
 "" set fo-=t   " don't automatically wrap text when typing
-"" set colorcolumn=80
-"" highlight ColorColumn ctermbg=233
 
 " easier formatting of paragraphs
 vmap Q gq
@@ -274,6 +284,36 @@ set statusline+=%*\ %-3(%{FileSize()}%)                 " File size
 
 
 "Other functions and mappings
+
+"Show visual width limit
+highlight ColorColumn ctermbg=77
+
+function! ToggleWidthLine()
+    if &colorcolumn ==# "80" 
+        set colorcolumn=120
+    elseif &colorcolumn ==# "120"
+        set colorcolumn=0
+    else
+        set colorcolumn=80
+    endif
+endfunction
+
+noremap <silent> w :call ToggleWidthLine()<cr>
+
+"Toggle current line and/or column
+
+function! ToggleLineHighlight()
+    set cursorline!
+endfunction
+
+function! ToggleColumnHighlight()
+    set cursorcolumn!
+endfunction
+
+noremap <silent> ,hl :call ToggleLineHighlight()<cr>
+noremap <silent> ,hc :call ToggleColumnHighlight()<cr>
+
+noremap <silent> ,hh :call ToggleLineHighlight()<cr> :call ToggleColumnHighlight()<cr>
 
 "Execute current file
 nmap <leader>, :!%:p<cr>
